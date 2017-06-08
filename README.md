@@ -139,6 +139,8 @@ clicked.
 Example:
 
 ``` js
+import { Link } from 'redux-simple-routing';
+
 class Header extends Component {
   render() {
     return (
