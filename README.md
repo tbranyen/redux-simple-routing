@@ -172,3 +172,13 @@ const push = store => (routeName, params) => {
   store.dispatch({ type: types.PUSH_STATE, routeName, params });
 };
 ```
+
+and then use it like:
+
+``` js
+function showEditor(movieId) {
+  push('editor', { movieId });
+}
+
+showEditor('12345');
+```
