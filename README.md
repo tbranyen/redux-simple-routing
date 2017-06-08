@@ -144,7 +144,7 @@ class Header extends Component {
     return (
       <div className="tool-bar">
         <Link to="dashboard"><button>Dashboard</button></Link>
-        <Link to="editor" params={{ movieId: '60020435', type: 'production-elements' }}><button>Production Elements</button></Link>
+        <Link to="editor" params={{ movieId: '60020435' }}><button>Random Movie ID</button></Link>
       </div>
     );
   }
