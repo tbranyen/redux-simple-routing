@@ -1,0 +1,32 @@
+{
+  "name": "redux-simple-routing",
+  "version": "0.0.0",
+  "description": "Simple routing for Redux",
+  "main": "dist/redux-simple-routing.js",
+  "scripts": {
+    "build": "rollup -c rollup.config.js"
+  },
+  "keywords": ["redux", "routing"],
+  "author": "Tim Branyen (@tbranyen)",
+  "license": "MIT",
+  "devDependencies": {
+    "babel-plugin-transform-class-properties": "^6.22.0",
+    "babel-plugin-transform-object-rest-spread": "^6.23.0",
+    "babel-preset-es2015-rollup": "^3.0.0",
+    "babel-preset-react": "^6.24.1",
+    "rollup": "^0.41.4",
+    "rollup-plugin-babel": "^2.7.1",
+    "rollup-plugin-commonjs": "^8.0.2",
+    "rollup-plugin-node-resolve": "^2.0.0",
+    "rollup-plugin-replace": "^1.1.1",
+    "rollup-plugin-visualizer": "^0.2.0",
+    "rollup-watch": "^3.2.2"
+  },
+  "dependencies": {
+    "route-parser": "0.0.5"
+  },
+  "peerDependencies": {
+    "react": "*",
+    "prop-types": "*"
+  }
+}
