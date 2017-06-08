@@ -5,7 +5,7 @@ import { getActiveRoute, setActiveRoute } from '../utils';
 
 export default class Link extends Component {
   render() {
-    const { children, ...rest } = this.props;
+    const { children, to, params, ...rest } = this.props;
 
     return (
       <nav {...rest} onClick={this.navigateTo}>{this.props.children}</nav>
