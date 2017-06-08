@@ -5,8 +5,10 @@ import { getActiveRoute, setActiveRoute } from '../utils';
 
 export default class Link extends Component {
   render() {
+    const { children, ...rest } = this.props;
+
     return (
-      <nav onClick={this.navigateTo}>{this.props.children}</nav>
+      <nav {...rest} onClick={this.navigateTo}>{this.props.children}</nav>
     );
   }
 
