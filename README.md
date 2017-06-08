@@ -89,7 +89,8 @@ Note: This library uses `context` and therefore will need the `store` provided.
 This is generally accomplished using a react-redux `Provider`.
 
 ``` js
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Provider } from 'react-redux';
 import { maintainActivePage } from 'redux-simple-routing';
 import { DashboardPage } from '../components/pages/dashboard';
