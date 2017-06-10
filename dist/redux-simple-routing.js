@@ -144,6 +144,8 @@ function _possibleConstructorReturn$1(self, call) { if (!self) { throw new Refer
 
 function _inherits$1(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+var keys$1 = Object.keys;
+
 var Link = function (_Component) {
   _inherits$1(Link, _Component);
 
@@ -164,9 +166,23 @@ var Link = function (_Component) {
           params = _this$props.params;
       var store = _this.context.store;
 
-      var state = getActiveRoute();
 
       store.dispatch({ type: RouteTypes.PUSH_STATE, routeName: to, params: params });
+    }, _this.isActive = function () {
+      var _this$props2 = _this.props,
+          to = _this$props2.to,
+          params = _this$props2.params;
+      var store = _this.context.store;
+
+      var activeRoute = getActiveRoute();
+
+      if (!to || to === activeRoute.routeName) {
+        var activeParamNames = keys$1(activeRoute.params || {});
+
+        return !activeParamNames.filter(function (paramName) {
+          return activeRoute.params[paramName] !== params[paramName];
+        }).length;
+      }
     }, _temp), _possibleConstructorReturn$1(_this, _ret);
   }
 
@@ -179,9 +195,13 @@ var Link = function (_Component) {
           params = _props.params,
           rest = _objectWithoutProperties(_props, ['children', 'to', 'params']);
 
+      var additionalState = {
+        'data-active': this.isActive() || null
+      };
+
       return React__default.createElement(
         'nav',
-        _extends({}, rest, { onClick: this.navigateTo }),
+        _extends({}, rest, additionalState, { onClick: this.navigateTo }),
         this.props.children
       );
     }
@@ -199,7 +219,7 @@ Link.contextTypes = {
 };
 Link.defaultProps = {
   to: null,
-  params: null
+  params: {}
 };
 
 var _extends$1 = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };

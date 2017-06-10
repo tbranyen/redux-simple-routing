@@ -3,12 +3,17 @@ import PropTypes from 'prop-types';
 import types from '../route-types';
 import { getActiveRoute, setActiveRoute } from '../utils';
 
+const { keys } = Object;
+
 export default class Link extends Component {
   render() {
     const { children, to, params, ...rest } = this.props;
+    const additionalState = {
+      'data-active': this.isActive() || null,
+    };
 
     return (
-      <nav {...rest} onClick={this.navigateTo}>{this.props.children}</nav>
+      <nav {...rest} {...additionalState} onClick={this.navigateTo}>{this.props.children}</nav>
     );
   }
 
@@ -23,14 +28,27 @@ export default class Link extends Component {
 
   static defaultProps = {
     to: null,
-    params: null,
+    params: {},
   }
 
   navigateTo = () => {
     const { to, params } = this.props;
     const { store } = this.context;
-    const state = getActiveRoute();
 
     store.dispatch({ type: types.PUSH_STATE, routeName: to, params });
+  }
+
+  isActive = () => {
+    const { to, params } = this.props;
+    const { store } = this.context;
+    const activeRoute = getActiveRoute();
+
+    if (!to || to === activeRoute.routeName) {
+      const activeParamNames = keys(activeRoute.params || {});
+
+      return !activeParamNames.filter(paramName => {
+        return activeRoute.params[paramName] !== params[paramName];
+      }).length;
+    }
   }
 }
