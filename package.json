@@ -1,6 +1,6 @@
 {
   "name": "redux-simple-routing",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Simple routing for Redux",
   "main": "dist/redux-simple-routing.js",
   "scripts": {
