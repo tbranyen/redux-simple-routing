@@ -17,7 +17,9 @@ export default routesToPages => class ActivePage extends Component {
 
   constructor(props, context) {
     super(props, context);
-    this.state = { ActivePage: routesToPages.notFound };
+
+    const initialRouteName = this.context.store.getState().route.routeName;
+    this.state = { ActivePage: routesToPages[initialRouteName] };
   }
 
   componentWillUnmount() {

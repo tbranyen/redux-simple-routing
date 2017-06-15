@@ -109,7 +109,8 @@ var activePage = (function (routesToPages) {
         _this.setState({ ActivePage: routesToPages[route.routeName] });
       };
 
-      _this.state = { ActivePage: routesToPages.notFound };
+      var initialRouteName = _this.context.store.getState().route.routeName;
+      _this.state = { ActivePage: routesToPages[initialRouteName] };
       return _this;
     }
 
