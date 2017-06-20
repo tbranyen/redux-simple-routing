@@ -13,7 +13,9 @@ export default class Link extends Component {
     };
 
     return (
-      <nav {...rest} {...additionalState} onClick={this.navigateTo}>{this.props.children}</nav>
+      <nav onClick={this.navigateTo} {...additionalState} {...rest}>
+        {children}
+      </nav>
     );
   }
 

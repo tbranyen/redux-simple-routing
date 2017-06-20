@@ -1,0 +1,13 @@
+import types from './route-types';
+
+export const push = (to, params) => {
+  // Allow `routeName` aliased to `to` to be optional.
+  if (typeof to === 'object') {
+    params = to;
+    to = null;
+  }
+
+  return { type: types.PUSH_STATE, routeName: to, params };
+};
+
+export default { push };

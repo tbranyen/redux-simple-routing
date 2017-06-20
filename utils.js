@@ -31,7 +31,22 @@ export const setActiveRoute = (state, newRoute) => {
   }
 
   if (newRoute.params) {
-    activeRoute.params = newRoute.params;
+    const { params } = newRoute;
+
+    activeRoute.params = params;
+
+    // Coerce all params to String as that is what would come back from
+    // URL parsing.
+    Object.keys(params).forEach(key => {
+      const value = params[key];
+
+      if (value !== null && value !== undefined && !isNaN(value)) {
+        params[key] = String(params[key])
+      }
+      else {
+        delete params[key];
+      }
+    });
   }
 
   const route = routeMap[activeRoute.routeName] || routeMap.notFound;

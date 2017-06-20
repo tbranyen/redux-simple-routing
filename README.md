@@ -2,7 +2,7 @@
 
 *Simple, elegant, and flexible routing for React/Redux applications.*
 
-Stable version: 0.3.1
+Stable version: 0.4.0
 
 React Router is an excellent choice for routing a React application. In fact,
 many would consider it the de-facto choice, which is why I used it at Netflix
@@ -156,29 +156,33 @@ class Header extends Component {
 ## Changing the URL programmatically
 
 You can also change the URL very easily using the same API as `Link` via
-dispatching an action to your store. You could easily write a global `push`
-function using this approach:
+dispatching an action to your store. An action is provided out-of-the-box which
+you can use in your `mapDispatchToProps` function.
 
 ``` js
-import { types } from 'redux-simple-routing';
+import React, { Component } from 'react';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import { routeActions } from 'redux-simple-routing';
 
-const push = store => (routeName, params) => {
-  // Allow `routeName` to be optional.
-  if (typeof routeName === 'object') {
-    params = routeName;
-    routeName = null;
+export class MyComponent extends Component {
+  render() {
+    return (
+      <div/>
+    );
   }
 
-  store.dispatch({ type: types.PUSH_STATE, routeName, params });
-};
-```
+  static mapStateToProps = state => ({
+    route: state.route,
+  })
 
-and then use it like:
-
-``` js
-function showEditor(movieId) {
-  push('editor', { movieId });
+  static mapDispatchToProps = dispatch => bindActionCreators({
+    ...routeActions,
+  }, dispatch)
 }
 
-showEditor('12345');
+export const ConnectedMyComponent = connect(
+  MyComponent.mapStateToProps,
+  MyComponent.mapDispatchToProps
+)(Header);
 ```

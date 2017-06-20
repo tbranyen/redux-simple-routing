@@ -8,7 +8,7 @@ var React__default = 'default' in React ? React['default'] : React;
 PropTypes = 'default' in PropTypes ? PropTypes['default'] : PropTypes;
 routeParser = 'default' in routeParser ? routeParser['default'] : routeParser;
 
-var RouteTypes = {
+var types = {
   POP_STATE: 'POP_STATE',
   PUSH_STATE: 'PUSH_STATE'
 };
@@ -52,7 +52,22 @@ var setActiveRoute = function setActiveRoute(state, newRoute) {
   }
 
   if (newRoute.params) {
-    activeRoute.params = newRoute.params;
+    var params = newRoute.params;
+
+
+    activeRoute.params = params;
+
+    // Coerce all params to String as that is what would come back from
+    // URL parsing.
+    Object.keys(params).forEach(function (key) {
+      var value = params[key];
+
+      if (value !== null && value !== undefined && !isNaN(value)) {
+        params[key] = String(params[key]);
+      } else {
+        delete params[key];
+      }
+    });
   }
 
   var route = routeMap[activeRoute.routeName] || routeMap.notFound;
@@ -65,11 +80,11 @@ var setActiveRoute = function setActiveRoute(state, newRoute) {
 
 var monitorActiveRoute = function monitorActiveRoute(store) {
   // Initial route.
-  store.dispatch({ type: RouteTypes.POP_STATE });
+  store.dispatch({ type: types.POP_STATE });
 
   // Monitor for changes.
   window.onpopstate = function () {
-    return store.dispatch({ type: RouteTypes.POP_STATE });
+    return store.dispatch({ type: types.POP_STATE });
   };
 };
 
@@ -168,7 +183,7 @@ var Link = function (_Component) {
       var store = _this.context.store;
 
 
-      store.dispatch({ type: RouteTypes.PUSH_STATE, routeName: to, params: params });
+      store.dispatch({ type: types.PUSH_STATE, routeName: to, params: params });
     }, _this.isActive = function () {
       var _this$props2 = _this.props,
           to = _this$props2.to,
@@ -202,8 +217,8 @@ var Link = function (_Component) {
 
       return React__default.createElement(
         'nav',
-        _extends({}, rest, additionalState, { onClick: this.navigateTo }),
-        this.props.children
+        _extends({ onClick: this.navigateTo }, additionalState, rest),
+        children
       );
     }
   }]);
@@ -238,12 +253,12 @@ var reducer = (function (routes) {
     var action = arguments[1];
 
     switch (action.type) {
-      case RouteTypes.POP_STATE:
+      case types.POP_STATE:
         {
           return assign$1({}, state, getActiveRoute());
         }
 
-      case RouteTypes.PUSH_STATE:
+      case types.PUSH_STATE:
         {
           return assign$1({}, state, setActiveRoute(state, action));
         }
@@ -256,11 +271,26 @@ var reducer = (function (routes) {
   };
 });
 
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+var push = function push(to, params) {
+  // Allow `routeName` aliased to `to` to be optional.
+  if ((typeof to === 'undefined' ? 'undefined' : _typeof(to)) === 'object') {
+    params = to;
+    to = null;
+  }
+
+  return { type: types.PUSH_STATE, routeName: to, params: params };
+};
+
+var actions = { push: push };
+
 exports.maintainActivePage = activePage;
 exports.Link = Link;
-exports.types = RouteTypes;
+exports.types = types;
 exports.routeReducer = reducer;
 exports.Route = routeParser;
+exports.routeActions = actions;
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
