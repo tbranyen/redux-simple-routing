@@ -2,7 +2,7 @@
 
 *Simple, elegant, and flexible routing for React/Redux applications.*
 
-Stable version: 0.4.0
+Stable version: 0.5.0
 
 React Router is an excellent choice for routing a React application. In fact,
 many would consider it the de-facto choice, which is why I used it at Netflix
