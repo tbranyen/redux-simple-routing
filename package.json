@@ -6,7 +6,10 @@
   "scripts": {
     "build": "rollup -c rollup.config.js"
   },
-  "keywords": ["redux", "routing"],
+  "keywords": [
+    "redux",
+    "routing"
+  ],
   "author": "Tim Branyen (@tbranyen)",
   "license": "MIT",
   "devDependencies": {

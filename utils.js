@@ -40,7 +40,7 @@ export const setActiveRoute = (state, newRoute) => {
     Object.keys(params).forEach(key => {
       const value = params[key];
 
-      if (value !== null && value !== undefined && !isNaN(value)) {
+      if (value !== null && value !== undefined) {
         params[key] = String(params[key])
       }
       else {
@@ -52,7 +52,13 @@ export const setActiveRoute = (state, newRoute) => {
   const route = routeMap[activeRoute.routeName] || routeMap.notFound;
   const url = route.reverse(activeRoute.params);
 
-  history.pushState(null, null, `${url}${search}`);
+
+  if (url) {
+    history.pushState(null, null, `${url}${search}`);
+  }
+  else {
+    throw new Error('Invalid push');
+  }
 
   return activeRoute;
 };
