@@ -23,7 +23,7 @@ export const getActiveRoute = () => {
 };
 
 export const setActiveRoute = (state, newRoute) => {
-  const { search } = location;
+  const { pathname, search } = location;
   const activeRoute = assign({}, state);
 
   if (newRoute.routeName) {
@@ -52,11 +52,10 @@ export const setActiveRoute = (state, newRoute) => {
   const route = routeMap[activeRoute.routeName] || routeMap.notFound;
   const url = route.reverse(activeRoute.params);
 
-
-  if (url) {
+  if (url && `${pathname}${search}` !== `${url}${search}`) {
     history.pushState(null, null, `${url}${search}`);
   }
-  else {
+  else if (!url) {
     throw new Error('Invalid push');
   }
 

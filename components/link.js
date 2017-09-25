@@ -8,12 +8,14 @@ const { keys } = Object;
 export default class Link extends Component {
   render() {
     const { children, to, params, ...rest } = this.props;
+    const { navigateTo } = this;
+
     const additionalState = {
       'data-active': this.isActive() || null,
     };
 
     return (
-      <nav onClick={this.navigateTo} {...additionalState} {...rest}>
+      <nav onClick={navigateTo} {...additionalState} {...rest}>
         {children}
       </nav>
     );
@@ -33,7 +35,10 @@ export default class Link extends Component {
     params: {},
   }
 
-  navigateTo = () => {
+  navigateTo = ev => {
+    ev.stopPropagation();
+    ev.nativeEvent.stopImmediatePropagation();
+
     const { to, params } = this.props;
     const { store } = this.context;
 

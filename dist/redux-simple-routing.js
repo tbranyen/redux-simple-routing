@@ -43,6 +43,7 @@ var getActiveRoute = function getActiveRoute() {
 
 var setActiveRoute = function setActiveRoute(state, newRoute) {
   var _location2 = location,
+      pathname = _location2.pathname,
       search = _location2.search;
 
   var activeRoute = assign({}, state);
@@ -73,9 +74,9 @@ var setActiveRoute = function setActiveRoute(state, newRoute) {
   var route = routeMap[activeRoute.routeName] || routeMap.notFound;
   var url = route.reverse(activeRoute.params);
 
-  if (url) {
+  if (url && '' + pathname + search !== '' + url + search) {
     history.pushState(null, null, '' + url + search);
-  } else {
+  } else if (!url) {
     throw new Error('Invalid push');
   }
 
@@ -180,7 +181,10 @@ var Link = function (_Component) {
       args[_key] = arguments[_key];
     }
 
-    return _ret = (_temp = (_this = _possibleConstructorReturn$1(this, (_ref = Link.__proto__ || Object.getPrototypeOf(Link)).call.apply(_ref, [this].concat(args))), _this), _this.navigateTo = function () {
+    return _ret = (_temp = (_this = _possibleConstructorReturn$1(this, (_ref = Link.__proto__ || Object.getPrototypeOf(Link)).call.apply(_ref, [this].concat(args))), _this), _this.navigateTo = function (ev) {
+      ev.stopPropagation();
+      ev.nativeEvent.stopImmediatePropagation();
+
       var _this$props = _this.props,
           to = _this$props.to,
           params = _this$props.params;
@@ -215,13 +219,16 @@ var Link = function (_Component) {
           params = _props.params,
           rest = _objectWithoutProperties(_props, ['children', 'to', 'params']);
 
+      var navigateTo = this.navigateTo;
+
+
       var additionalState = {
         'data-active': this.isActive() || null
       };
 
       return React__default.createElement(
         'nav',
-        _extends({ onClick: this.navigateTo }, additionalState, rest),
+        _extends({ onClick: navigateTo }, additionalState, rest),
         children
       );
     }
