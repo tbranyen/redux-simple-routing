@@ -21,6 +21,10 @@ export default routes => {
         return assign({}, state, setActiveRoute(state, action));
       }
 
+      case RouteTypes.REPLACE_STATE: {
+        return assign({}, state, setActiveRoute(state, action, true));
+      }
+
       default: {
         return state;
       }
