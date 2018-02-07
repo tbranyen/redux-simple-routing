@@ -22,7 +22,7 @@ export const getActiveRoute = () => {
   return activeRoute;
 };
 
-export const setActiveRoute = (state, newRoute) => {
+export const setActiveRoute = (state, newRoute, replace = false) => {
   const { pathname, search } = location;
   const activeRoute = assign({}, state);
 
@@ -37,7 +37,7 @@ export const setActiveRoute = (state, newRoute) => {
 
     // Coerce all params to String as that is what would come back from
     // URL parsing.
-    Object.keys(params).forEach(key => {
+    keys(params).forEach(key => {
       const value = params[key];
 
       if (value !== null && value !== undefined) {
@@ -51,9 +51,10 @@ export const setActiveRoute = (state, newRoute) => {
 
   const route = routeMap[activeRoute.routeName] || routeMap.notFound;
   const url = route.reverse(activeRoute.params);
+  const stateMethod = replace ? 'replaceState' : 'pushState';
 
   if (url && `${pathname}${search}` !== `${url}${search}`) {
-    history.pushState(null, null, `${url}${search}`);
+    history[stateMethod](null, null, `${url}${search}`);
   }
   else if (!url) {
     throw new Error('Invalid push');

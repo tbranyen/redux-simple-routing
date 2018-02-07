@@ -167,8 +167,14 @@ import { routeActions } from 'redux-simple-routing';
 
 export class MyComponent extends Component {
   render() {
+    const { push, replace, route } = this.props;
+
     return (
-      <div/>
+      <div onClick={() => push('someRoute', { id: 0 })}>Push a new routeName with no params</div>
+
+      {route.routeName === 'someRoute' && (
+        <div onClick={() => replace({ id: 5 })}>Replace the current URL id param</div> 
+      )}
     );
   }
 

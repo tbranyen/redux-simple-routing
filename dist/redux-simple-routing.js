@@ -10,7 +10,8 @@ routeParser = 'default' in routeParser ? routeParser['default'] : routeParser;
 
 var types = {
   POP_STATE: 'POP_STATE',
-  PUSH_STATE: 'PUSH_STATE'
+  PUSH_STATE: 'PUSH_STATE',
+  REPLACE_STATE: 'REPLACE_STATE'
 };
 
 var assign = Object.assign;
@@ -42,6 +43,7 @@ var getActiveRoute = function getActiveRoute() {
 };
 
 var setActiveRoute = function setActiveRoute(state, newRoute) {
+  var replace = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
   var _location2 = location,
       pathname = _location2.pathname,
       search = _location2.search;
@@ -60,7 +62,7 @@ var setActiveRoute = function setActiveRoute(state, newRoute) {
 
     // Coerce all params to String as that is what would come back from
     // URL parsing.
-    Object.keys(params).forEach(function (key) {
+    keys(params).forEach(function (key) {
       var value = params[key];
 
       if (value !== null && value !== undefined) {
@@ -73,9 +75,10 @@ var setActiveRoute = function setActiveRoute(state, newRoute) {
 
   var route = routeMap[activeRoute.routeName] || routeMap.notFound;
   var url = route.reverse(activeRoute.params);
+  var stateMethod = replace ? 'replaceState' : 'pushState';
 
   if (url && '' + pathname + search !== '' + url + search) {
-    history.pushState(null, null, '' + url + search);
+    history[stateMethod](null, null, '' + url + search);
   } else if (!url) {
     throw new Error('Invalid push');
   }
@@ -274,6 +277,11 @@ var reducer = (function (routes) {
           return assign$1({}, state, setActiveRoute(state, action));
         }
 
+      case types.REPLACE_STATE:
+        {
+          return assign$1({}, state, setActiveRoute(state, action, true));
+        }
+
       default:
         {
           return state;
@@ -294,7 +302,17 @@ var push = function push(to, params) {
   return { type: types.PUSH_STATE, routeName: to, params: params };
 };
 
-var actions = { push: push };
+var replace = function replace(to, params) {
+  // Allow `routeName` aliased to `to` to be optional.
+  if ((typeof to === 'undefined' ? 'undefined' : _typeof(to)) === 'object') {
+    params = to;
+    to = null;
+  }
+
+  return { type: types.REPLACE_STATE, routeName: to, params: params };
+};
+
+var actions = { push: push, replace: replace };
 
 exports.maintainActivePage = activePage;
 exports.Link = Link;
