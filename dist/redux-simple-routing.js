@@ -25,13 +25,14 @@ var addInternalRoutes = function addInternalRoutes(routes) {
 
 var getActiveRoute = function getActiveRoute() {
   var _location = location,
-      pathname = _location.pathname;
+      pathname = _location.pathname,
+      search = _location.search;
 
   var activeRoute = { routeName: 'notFound' };
 
   keys(routeMap).some(function (routeName) {
     var route = routeMap[routeName];
-    var params = route.match(pathname);
+    var params = route.match('' + pathname + search);
 
     if (params) {
       assign(activeRoute, { params: params, routeName: routeName, route: route });
@@ -77,8 +78,8 @@ var setActiveRoute = function setActiveRoute(state, newRoute) {
   var url = route.reverse(activeRoute.params);
   var stateMethod = replace ? 'replaceState' : 'pushState';
 
-  if (url && '' + pathname + search !== '' + url + search) {
-    history[stateMethod](null, null, '' + url + search);
+  if (url && '' + pathname + search !== url) {
+    history[stateMethod](null, null, url);
   } else if (!url) {
     throw new Error('Invalid push');
   }
@@ -292,24 +293,24 @@ var reducer = (function (routes) {
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-var push = function push(to, params) {
+var push = function push(routeName, params) {
   // Allow `routeName` aliased to `to` to be optional.
-  if ((typeof to === 'undefined' ? 'undefined' : _typeof(to)) === 'object') {
-    params = to;
-    to = null;
+  if ((typeof routeName === 'undefined' ? 'undefined' : _typeof(routeName)) === 'object') {
+    params = routeName;
+    routeName = null;
   }
 
-  return { type: types.PUSH_STATE, routeName: to, params: params };
+  return { type: types.PUSH_STATE, routeName: routeName, params: params };
 };
 
-var replace = function replace(to, params) {
+var replace = function replace(routeName, params) {
   // Allow `routeName` aliased to `to` to be optional.
-  if ((typeof to === 'undefined' ? 'undefined' : _typeof(to)) === 'object') {
-    params = to;
-    to = null;
+  if ((typeof routeName === 'undefined' ? 'undefined' : _typeof(routeName)) === 'object') {
+    params = routeName;
+    routeName = null;
   }
 
-  return { type: types.REPLACE_STATE, routeName: to, params: params };
+  return { type: types.REPLACE_STATE, routeName: routeName, params: params };
 };
 
 var actions = { push: push, replace: replace };
@@ -320,6 +321,7 @@ exports.types = types;
 exports.routeReducer = reducer;
 exports.Route = routeParser;
 exports.routeActions = actions;
+exports.monitorActiveRoute = monitorActiveRoute;
 
 Object.defineProperty(exports, '__esModule', { value: true });
 

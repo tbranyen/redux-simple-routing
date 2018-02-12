@@ -6,12 +6,12 @@ const routeMap = {};
 export const addInternalRoutes = routes => assign(routeMap, routes);
 
 export const getActiveRoute = () => {
-  const { pathname } = location;
+  const { pathname, search } = location;
   const activeRoute = { routeName: 'notFound' };
 
   keys(routeMap).some(routeName => {
     const route = routeMap[routeName];
-    const params = route.match(pathname);
+    const params = route.match(`${pathname}${search}`);
 
     if (params) {
       assign(activeRoute, { params, routeName, route });
@@ -53,8 +53,8 @@ export const setActiveRoute = (state, newRoute, replace = false) => {
   const url = route.reverse(activeRoute.params);
   const stateMethod = replace ? 'replaceState' : 'pushState';
 
-  if (url && `${pathname}${search}` !== `${url}${search}`) {
-    history[stateMethod](null, null, `${url}${search}`);
+  if (url && `${pathname}${search}` !== url) {
+    history[stateMethod](null, null, url);
   }
   else if (!url) {
     throw new Error('Invalid push');

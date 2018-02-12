@@ -1,4 +1,3 @@
-import Route from 'route-parser';
 import RouteTypes from './route-types';
 import { addInternalRoutes, getActiveRoute, setActiveRoute } from './utils';
 
