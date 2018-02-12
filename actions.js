@@ -1,23 +1,23 @@
 import types from './route-types';
 
-export const push = (to, params) => {
+export const push = (routeName, params) => {
   // Allow `routeName` aliased to `to` to be optional.
-  if (typeof to === 'object') {
-    params = to;
-    to = null;
+  if (typeof routeName === 'object') {
+    params = routeName;
+    routeName = null;
   }
 
-  return { type: types.PUSH_STATE, routeName: to, params };
+  return { type: types.PUSH_STATE, routeName, params };
 };
 
-export const replace = (to, params) => {
+export const replace = (routeName, params) => {
   // Allow `routeName` aliased to `to` to be optional.
-  if (typeof to === 'object') {
-    params = to;
-    to = null;
+  if (typeof routeName === 'object') {
+    params = routeName;
+    routeName = null;
   }
 
-  return { type: types.REPLACE_STATE, routeName: to, params };
+  return { type: types.REPLACE_STATE, routeName, params };
 };
 
 export default { push, replace };
