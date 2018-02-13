@@ -2,35 +2,24 @@
 
 *Simple, elegant, and flexible routing for React/Redux applications.*
 
-Stable version: 0.6.0
+Stable version: 0.7.0
 
-React Router is an excellent choice for routing a React application. In fact,
-many would consider it the de-facto choice, which is why I used it at Netflix
-to build applications. While the community is strong, I found the API wasn't
-for me. Sure you could compose and describe your routes in JSX, but how do you
-change a fragment of the URL dynamically? How do you change state within a
-given page? I asked this [very
-question](https://gist.github.com/tbranyen/9a0ee01a169f548e79e05a09fa3b3d5a) on
-Reddit and Twitter and didn't get any solutions. It seems like developers who
-use React Router simply never change the URL dynamically.
-
-Starting on a new app I decided to try my hand at improving the routing to work
-the way this app needed to function. This is an experimental API, but seems to
-work fine for now, so probably won't change unless something major comes up as
-a blocker.
+Designed for browser-based Redux applications, this tool allows declarative
+mapping of URL to components. This library of functions and components is
+written around the route-parser library and exposes an elegant interface for
+params, splats, optional params/splats, query parameters, and more.
 
 ## Features
 
-- Manages which page to display based on the route
+- Manages which component to render based on the route
 - Named pages for easier navigation and structure
-- Deeply integrated with Redux and React
-- Dynamically change which page (root component) is rendered when navigating
+- Deeply integrated with Redux, with optional React components
 - Super lightweight!
 
 ## Install
 
-Ensure you already have: `React`, `Redux`, and `PropTypes` installed in your
-application.
+Ensure you have: `Redux` installed in your application. You may want `React`
+and `PropTypes` installed as well if you want to use convenience wrappers.
 
 ``` sh
 npm install redux-simple-routing --save
@@ -50,7 +39,7 @@ following logic:
 import { Route, routeReducer } from 'redux-simple-routing';
 
 export const route = routeReducer({
-  'dashboard': new Route('/(dashboard)'),
+  'dashboard': new Route('/(?query=:query)'),
   'editor': new Route('/editor/:movieId(/:packageId)'),
   'notFound': new Route('/*'),
 });
